@@ -28,3 +28,7 @@
 *.app
 
 !/Arnold_Windows/bin/*
+!/Arnold_Windows/lib/*
+
+!/libcurl/bin/*
+!/libcurl/lib/*
