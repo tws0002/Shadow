@@ -26,3 +26,5 @@
 *.exe
 *.out
 *.app
+
+!/Arnold_Windows/bin/*
