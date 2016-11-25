@@ -27,8 +27,10 @@
 *.out
 *.app
 
-!/Arnold_Windows/bin/*
-!/Arnold_Windows/lib/*
+#!/Arnold_Windows/bin/*
+#!/Arnold_Windows/lib/*
 
 !/libcurl/bin/*
 !/libcurl/lib/*
+
+*.pro.user
