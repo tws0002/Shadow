@@ -28,6 +28,7 @@ void AssFile::aiBegin()
     auto current_path = QDir::currentPath();
     current_path += QString("\\plugin");
     AiLoadPlugins(current_path.replace("/", "\\").toLatin1());
+
     AiASSLoad(m_file.toLatin1());
 }
 
@@ -70,4 +71,19 @@ QList<Texture *> AssFile::allTextures()
         aiEnd();
     }
     return texs;
+}
+
+void AssFile::setTextures(QList<Texture *> texs)
+{
+    aiBegin();
+
+    for(int i = 0; i < texs.size(); ++i)
+    {
+        auto node = AiNodeLookUpByName(texs[i]->nodeName().toLatin1());
+        AiNodeSetStr(node, "filename", texs[i]->fileName().toLatin1());
+    }
+
+    AiASSWrite(m_file.toLatin1());
+
+    aiEnd();
 }

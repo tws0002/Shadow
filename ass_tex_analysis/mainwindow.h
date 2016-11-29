@@ -19,9 +19,11 @@ public:
 
 private:
     void open();
+    void setPath();
     void closeFile();
 
     QAction *act_open;
+    QAction *act_setpath;
     QAction *act_close;
     TextureTableModel *tex_model;
     TextureTable *table_view;

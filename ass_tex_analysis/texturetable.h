@@ -9,6 +9,8 @@ class TextureTable : public QTableView
 public:
     explicit TextureTable(QWidget *parent = 0);
 
+    QList<int> selectedRows();
+
 signals:
 
 public slots:

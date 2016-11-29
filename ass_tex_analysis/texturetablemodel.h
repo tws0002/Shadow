@@ -24,6 +24,8 @@ public:
     void setTextures(QList<Texture *> list);
     void clearAllTexture();
 
+    QList<Texture *> getMany(QList<int> rows);
+
 private:
     QStringList header;
     QList<Texture *> textures;

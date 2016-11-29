@@ -104,3 +104,15 @@ void TextureTableModel::clearAllTexture()
     }
     endResetModel();
 }
+
+QList<Texture *> TextureTableModel::getMany(QList<int> rows)
+{
+    QList<Texture *> texs;
+
+    for(int i = 0; i < rows.size(); ++i)
+    {
+        auto row = rows[i];
+        texs.append(textures[row]);
+    }
+    return texs;
+}

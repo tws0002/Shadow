@@ -18,6 +18,7 @@ public:
     void aiBegin();
     void aiEnd();
     QList<Texture *> allTextures();
+    void setTextures(QList<Texture *> texs);
 
 signals:
 
