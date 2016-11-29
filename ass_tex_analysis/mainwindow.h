@@ -1,8 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "texturetablemodel.h"
 #include <QMainWindow>
+#include "texturetablemodel.h"
+#include "texturetable.h"
+#include "assfile.h"
 
 class QAction;
 class QTableView;
@@ -17,10 +19,13 @@ public:
 
 private:
     void open();
+    void closeFile();
 
     QAction *act_open;
+    QAction *act_close;
     TextureTableModel *tex_model;
-    QTableView *table_view;
+    TextureTable *table_view;
+    AssFile ass_file;
 };
 
 #endif // MAINWINDOW_H
