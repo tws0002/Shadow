@@ -37,7 +37,7 @@ def get_file_textures(ass_file):
     ai_begin()
     AiASSLoad(ass_file)
 
-    texs = []
+    tex_list = []
 
     it = AiUniverseGetNodeIterator(AI_NODE_SHADER)
     while not AiNodeIteratorFinished(it):
@@ -49,7 +49,7 @@ def get_file_textures(ass_file):
             tex.file_name = AiNodeGetStr(node, "filename")
             tex.node_type = 'image'
             tex.check()
-            texs.append(tex)
+            tex_list.append(tex)
         elif AiNodeIs(node, "MayaFile"):
             tex = Texture()
             tex.ass_file = ass_file
@@ -57,12 +57,12 @@ def get_file_textures(ass_file):
             tex.file_name = AiNodeGetStr(node, "filename")
             tex.node_type = 'MayaFile'
             tex.check()
-            texs.append(tex)
+            tex_list.append(tex)
     AiNodeIteratorDestroy(it)
 
     ai_end()
 
-    return texs
+    return tex_list
 
 
 def change_file_textures(ass_file, textures):
@@ -89,11 +89,11 @@ class TextureModel(QtCore.QAbstractTableModel):
     def get(self, index):
         return self.object_list[index.row()]
 
-    def get_many(self, indexs):
+    def get_many(self, indexes):
         obj_list = []
-        if not indexs:
+        if not indexes:
             return obj_list
-        for index in indexs:
+        for index in indexes:
             if index.column() == 0:
                 obj = self.get(index)
                 obj_list.append(obj)
@@ -142,7 +142,7 @@ class TextureModel(QtCore.QAbstractTableModel):
 
 
 class TexReplacer(QtGui.QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(TexReplacer, self).__init__(parent)
         self.title = 'Texture Replacer'
         self.setWindowTitle(self.title)
@@ -194,12 +194,12 @@ class TexReplacer(QtGui.QWidget):
         if not folder:
             return False
         
-        texs = self.tex_model.get_many(self.tex_table.selectedIndexes())
-        for tex in texs:
+        tex_list = self.tex_model.get_many(self.tex_table.selectedIndexes())
+        for tex in tex_list:
             new_file = os.path.join(folder, os.path.basename(tex.file_name))
             tex.file_name = new_file.replace("\\", "/")
 
-        change_file_textures(self.ass_file, texs)
+        change_file_textures(self.ass_file, tex_list)
         for tex in self.tex_model.object_list:
             tex.check()
         self.tex_model.reset()
