@@ -34,3 +34,13 @@
 !/libcurl/lib/*
 
 *.pro.user
+
+# Python ===
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# PyCharm
+/Scripts/.idea
+
+.DS_Store
