@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QAbstractTableModel>
 #include <QModelIndex>
+#include <QDir>
 
 TextureTableModel::TextureTableModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -81,6 +82,11 @@ QVariant TextureTableModel::headerData(int section, Qt::Orientation orientation,
     }
 }
 
+void TextureTableModel::setAssFile(AssFile *file)
+{
+    ass_file = file;
+}
+
 void TextureTableModel::addTexture(Texture *tex)
 {
     beginResetModel();
@@ -115,4 +121,33 @@ QList<Texture *> TextureTableModel::getMany(QList<int> rows)
         texs.append(textures[row]);
     }
     return texs;
+}
+
+void TextureTableModel::setPath(QString path, QList<int> rows)
+{
+    QDir new_path(path);
+
+    beginResetModel();
+    for(int i = 0; i < rows.size(); ++i)
+    {
+        auto row = rows[i];
+        auto tex = textures[row];
+        QDir old_file(tex->fileName());
+        QString new_file = new_path.filePath(old_file.dirName());
+        tex->setFileName(new_file);
+        ass_file->updateTexture(tex);
+    }
+    endResetModel();
+}
+
+void TextureTableModel::setFile(QString file, QList<int> rows)
+{
+    beginResetModel();
+    for(int i = 0; i < rows.size(); ++i)
+    {
+        auto tex = textures[rows[i]];
+        tex->setFileName(file);
+        ass_file->updateTexture(tex);
+    }
+    endResetModel();
 }

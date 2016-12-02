@@ -15,17 +15,25 @@ public:
     void setFile(QString file);
     QString file();
 
-    void aiBegin();
-    void aiEnd();
+    void load();
+    void close();
+    void save();
+    void saveAs(QString n_file);
+    bool isLoaded();
+
     QList<Texture *> allTextures();
-    void setTextures(QList<Texture *> texs);
+    void updateTextures(QList<Texture *> texs);
+    void updateTexture(Texture *tex);
 
 signals:
 
 public slots:
 
 private:
+    void loadPlugins();
+
     QString m_file;
+    bool m_loaded;
 };
 
 #endif // ASSFILE_H

@@ -4,7 +4,7 @@
 
 AssFile::AssFile(QObject *parent) : QObject(parent)
 {
-
+    m_loaded = false;
 }
 
 AssFile::AssFile(QString file, QObject *parent) : QObject(parent)
@@ -22,29 +22,61 @@ QString AssFile::file()
     return m_file;
 }
 
-void AssFile::aiBegin()
+void AssFile::load()
 {
-    AiBegin();
+    if(!m_file.isEmpty())
+    {
+        AiBegin();
+        loadPlugins();
+        AiASSLoad(m_file.toLatin1());
+        m_loaded = true;
+    }
+    else
+    {
+        m_loaded = false;
+    }
+}
+
+void AssFile::close()
+{
+    if(m_loaded)
+    {
+        AiEnd();
+        m_loaded = false;
+    }
+}
+
+void AssFile::loadPlugins()
+{
     auto current_path = QDir::currentPath();
     current_path += QString("\\plugin");
     AiLoadPlugins(current_path.replace("/", "\\").toLatin1());
-
-    AiASSLoad(m_file.toLatin1());
 }
 
-void AssFile::aiEnd()
+bool AssFile::isLoaded()
 {
-    AiEnd();
+    return m_loaded;
+}
+
+void AssFile::save()
+{
+    AiASSWrite(m_file.toLatin1());
+}
+
+void AssFile::saveAs(QString n_file)
+{
+    if(!n_file.isEmpty())
+    {
+        AiASSWrite(n_file.toLatin1());
+    }
 }
 
 QList<Texture *> AssFile::allTextures()
 {
     QList<Texture *> texs;
 
-    if(!m_file.isEmpty())
+    if(m_loaded)
     {
-        aiBegin();
-
         auto it = AiUniverseGetNodeIterator(AI_NODE_SHADER);
         while(!AiNodeIteratorFinished(it))
         {
@@ -68,22 +100,22 @@ QList<Texture *> AssFile::allTextures()
                 texs.append(tex);
             }
         }
-        aiEnd();
     }
     return texs;
 }
 
-void AssFile::setTextures(QList<Texture *> texs)
+void AssFile::updateTextures(QList<Texture *> texs)
 {
-    aiBegin();
-
     for(int i = 0; i < texs.size(); ++i)
     {
         auto node = AiNodeLookUpByName(texs[i]->nodeName().toLatin1());
         AiNodeSetStr(node, "filename", texs[i]->fileName().toLatin1());
     }
-
-    AiASSWrite(m_file.toLatin1());
-
-    aiEnd();
 }
+
+void AssFile::updateTexture(Texture *tex)
+{
+    auto node = AiNodeLookUpByName(tex->nodeName().toLatin1());
+    AiNodeSetStr(node, "filename", tex->fileName().toLatin1());
+}
+

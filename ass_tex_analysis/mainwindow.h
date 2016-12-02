@@ -20,10 +20,16 @@ public:
 private:
     void open();
     void setPath();
+    void setFile();
+    void save();
+    void saveAs();
     void closeFile();
 
     QAction *act_open;
     QAction *act_setpath;
+    QAction *act_setfile;
+    QAction *act_save;
+    QAction *act_saveas;
     QAction *act_close;
     TextureTableModel *tex_model;
     TextureTable *table_view;
