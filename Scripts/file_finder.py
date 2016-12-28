@@ -23,10 +23,13 @@ def find_all(folder):
     find_nk(folder)
     return out_list
 
-if __name__ == "__main__":
+def find_dir():
     aaa = find_all(start_dir)
 
     with open('out.txt', 'w') as f:
         for a in aaa:
             f.write(a)
             f.write('\n')
+
+if __name__ == "__main__":
+    pass
